@@ -6,9 +6,12 @@
   "scripts": {
     "build": "npm run clear && ./node_modules/.bin/babel --out-dir lib src",
     "build:watch": "npm run build -- --watch",
+    "build:umd": "./node_modules/.bin/webpack --output-filename spotify-wrapper.umd.js",
+    "build:umd:min": "./node_modules/.bin/webpack --output-filename spotify-wrapper.umd.min.js -p",
+    "build:all": "npm run build && npm run build:umd && npm run build:umd:min",
     "clear": "rimraf lib",
     "lint": "./node_modules/.bin/eslint src/*.js",
-    "prepush": "npm run lint",
+    "prepush": "npm run lint && npm run test",
     "test": "./node_modules/.bin/mocha tests/**/*.spec.js --require babel-register",
     "test:tdd": "./node_modules/.bin/mocha tests/**/*.spec.js --require babel-register --watch",
     "test:coverage": "nyc npm test"
@@ -24,7 +27,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/willianjusten/spotify-wrapper.git"
+    "url": "git+https://github.com/gsabadini/spotify-wrapper.git"
   },
   "keywords": [
     "js",
@@ -62,6 +65,8 @@
     "webpack": "^2.4.1"
   },
   "dependencies": {
-    "axios": "^0.18.0"
+    "axios": "^0.18.0",
+    "vue": "^2.5.21",
+    "vue-router": "^3.0.2"
   }
 }

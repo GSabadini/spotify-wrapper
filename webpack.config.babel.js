@@ -1,18 +1,18 @@
-import {join} from 'path'
+import { join } from 'path';
 
-const include = join(__dirname, 'src')
+const include = join(__dirname, 'src');
 
 export default {
-  entry: './index',
+  entry: './src/index',
   output: {
     path: join(__dirname, 'dist'),
     libraryTarget: 'umd',
-    library: 'SpotifyWrapper',
+    library: 'spotifyWrapper',
   },
   devtool: 'source-map',
   module: {
     loaders: [
-      {test: /\.js$/, loader: 'babel-loader', include},
-    ]
-  }
-}
+      { test: /\.js$/, loader: 'babel-loader', include },
+    ],
+  },
+};
