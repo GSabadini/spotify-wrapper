@@ -63,6 +63,35 @@ const selectCategory = {
   `,
 };
 
+const buttonClear = {
+  props: ['payload'],
+  computed: {
+    pay: {
+      get() {
+        return this.payload;
+      },
+      set() {
+        this.$emit('updated:payload', {});
+      },
+    },
+  },
+  methods: {
+    clearPayload() {
+      this.pay = {};
+    },
+  },
+  template: `
+    <div class="buttonClear">
+      <v-btn
+        dark
+        block
+        color="error"
+        @click="clearPayload()"
+      >Clear data</v-btn>
+    </div>
+  `,
+};
+
 const buttonInput = {
   props: [
     'search',
@@ -72,7 +101,6 @@ const buttonInput = {
   computed: {
     pay: {
       get() {
-        console.log(this.payload, 'get');
         return this.payload;
       },
       set(newValue) {
@@ -81,90 +109,210 @@ const buttonInput = {
     },
   },
   methods: {
-    handleSearch(query, type) {
-      const search = {
-        albums() {
-          // const albums = spotifyWrapper.searchAlbums(query);
-          // let listItems;
-          // let promise;
-          //
-          // promise = albums.then(data => data.albums.items)
-          //
-          // console.log('promise', promise);
-          // albums
-          //   .then(data => {
-          //
-          //     listItems = data.albums.items.map(item => {
-          //       return {
-          //         image: item.images[0].url,
-          //         name: item.name,
-          //       }
-          //     })
-          //
-          //     this.payload = listItems
-          //   })
-        },
-        artists() {
-          const artists = spotifyWrapper.searchArtists(query);
+    getAlbums(query) {
+      const albums = spotifyWrapper.searchAlbums(query);
 
-          return searchArtists;
-        },
-        tracks() {
-          const tracks = spotifyWrapper.searchTracks(query);
-
-          return tracks;
-        },
-        playlist() {
-          const playlist = spotifyWrapper.searchPlaylist(query);
-
-          return playlist;
-        },
-      }
-
-      return search[type]();
+      albums
+        .then((data) => {
+          console.log(data)
+          if (data.items) return {};
+          this.pay = data.albums.items.map(item => ({
+            image: item.images[0] ? item.images[0].url : './assets/default-image.png',
+            name: item.name,
+          }));
+        })
+        .catch((error) => {
+          alert('RENEW YOUR TOKEN!')
+        });
     },
-    getSearch(query, type = 'album') {
+    getArtists(query) {
+      const artists = spotifyWrapper.searchArtists(query);
+
+      artists
+        .then((data) => {
+          console.log(data)
+          if (data.items) return {};
+          this.pay = data.artists.items.map(item => ({
+            image: item.images[0] ? item.images[0].url : './assets/default-image.png',
+            name: item.name,
+            popularity: item.popularity,
+          }));
+        })
+        .catch((error) => {
+          alert('RENEW YOUR TOKEN!')
+        });
+    },
+    getTracks(query) {
+      const tracks = spotifyWrapper.searchTracks(query);
+
+      tracks
+        .then((data) => {
+          console.log(data)
+          if (data.items) return {};
+          this.pay = data.tracks.items.map(item => ({
+            artist: item.artists[0].name,
+            preview_url: item.preview_url || '',
+            name: item.name,
+            popularity: item.popularity,
+          }));
+        })
+        .catch((error) => {
+          alert('RENEW YOUR TOKEN!')
+        });
+    },
+    getPlaylists(query) {
+      const playlists = spotifyWrapper.searchPlaylists(query);
+
+      playlists
+        .then((data) => {
+          console.log(data)
+          if (data.items) return {};
+          this.pay = data.playlists.items.map(item => ({
+            image: item.images[0] ? item.images[0].url : './assets/default-image.png',
+            name: item.name,
+            tracks: item.tracks.href,
+          }));
+        })
+        .catch((error) => {
+          alert('RENEW YOUR TOKEN!')
+        });
+    },
+    getSearch(query, type) {
+      const self = this;
+
       if (!query) {
-        return
+        return;
       }
 
       if (!this.selectedCategory) {
         alert('Selecione uma categoria');
-        return
+        return;
       }
 
-      this.pay = this.handleSearch(query, type);
-      console.log(this.pay)
-    }
+      const search = {
+        albums() {
+          self.getAlbums(query);
+        },
+        artists() {
+          self.getArtists(query);
+        },
+        tracks() {
+          self.getTracks(query);
+        },
+        playlists() {
+          self.getPlaylists(query);
+        },
+      };
+
+      search[type]();
+    },
+  },
+  watch: {
+    selectedCategory() {
+      this.getSearch(this.search, this.selectedCategory)
+    },
   },
   template: `
     <div class="buttonInput">
       <v-btn
-        block
         dark
+        block
         color="primary"
+        @keydown.enter="getSearch(search, selectedCategory)"
         @click="getSearch(search, selectedCategory)"
       >Search</v-btn>
     </div>
   `,
 };
 
-const resultSearch = {
+const resultAlbums = {
   props: ['payload'],
+  template: `
+    <v-layout class="mt-5" row wrap align-center>
+      <v-flex sm12 md6 lg4 v-for="(album, index) in payload" :key="index">
+        <h3 class="my-2"> {{ album.name }} </h3>
+        <v-img :src="album.image" width="439" heigth="439"/>
+      </v-flex>
+    </v-layout>
+  `,
+};
+
+const resultArtists = {
+  props: ['payload'],
+  template: `
+    <v-layout class="mt-5" row wrap align-center>
+      <v-flex sm12 md6 lg4 v-for="(artist, index) in payload" :key="index">
+        <h3 class="my-2"> {{ artist.name }} - Popularity: {{ artist.popularity }} </h3>
+        <v-img :src="artist.image" width="439" heigth="439"/>
+      </v-flex>
+    </v-layout>
+  `,
+};
+
+const resultTracks = {
+  props: ['payload'],
+  template: `
+    <v-layout class="mt-5" row wrap align-center>
+      <v-flex sm12 md6 lg4 v-for="(track, index) in payload" :key="index">
+        <video controls name="media">
+          <source :src="track.preview_url" type="audio/mpeg">
+        </video>
+        <h3 class="my-2"> {{ track.name }} - &#9733 {{ track.popularity }} </h3>
+        <p> {{ track.artist }} </p>
+      </v-flex>
+    </v-layout>
+  `,
+};
+
+const resultPlaylists = {
+  props: ['payload'],
+  template: `
+    <v-layout class="mt-5" row wrap align-center>
+      <v-flex sm12 md6 lg4 v-for="(playlist, index) in payload" :key="index">
+        <h3 class="my-2"> {{ playlist.name }}</h3>
+          <v-img :src="playlist.image" width="439" heigth="439"/>
+        <p> {{ playlist.tracks }} </p>
+      </v-flex>
+    </v-layout>
+  `,
+};
+
+const notFound = {
+  template: `
+    <v-layout class="mt-5" row wrap align-center justify-center>
+      <v-flex xs12>
+        <h1 color="red" class="my-2"> NENHUM RESULTADO ! ! !</h1>
+      </v-flex>
+    </v-layout>
+  `,
+};
+
+const result = {
+  props: [
+    'payload',
+    'selectedCategory',
+  ],
+  components: {
+    resultAlbums,
+    resultArtists,
+    resultTracks,
+    resultPlaylists,
+    notFound,
+  },
   computed: {
     payloadExist() {
       return !!Object.keys(this.payload).length;
     },
   },
   template: `
-    <div class="resultSearch">
-      <pre> {{ payload }} </pre>
-      <v-layout class="mt-5" row wrap align-center justify-center>
-        <v-flex sm12 md6 lg4 v-for="(album, index) in payload" :key="index">
-          <h3 class="my-2"> {{ album.name }} </h3>
-          <v-img :src="album.image" width="439" heigth="439"/>
-        </v-flex>
-      </v-layout>
+    <div class="resultSearch" v-if="payloadExist">
+      <result-albums v-if="selectedCategory === 'albums'" :payload="payload"/>
+      <result-playlists v-if="selectedCategory === 'playlists'" :payload="payload"/>
+      <result-artists v-if="selectedCategory === 'artists'" :payload="payload"/>
+      <result-tracks v-if="selectedCategory === 'tracks'" :payload="payload"/>
+    </div>
+    <div class="notFound" v-else>
+      <not-found/>
     </div>
   `,
 };
@@ -172,9 +320,10 @@ const resultSearch = {
 const containerView = {
   components: {
     buttonInput,
+    buttonClear,
     searchInput,
     selectCategory,
-    resultSearch,
+    result,
   },
   data: () => ({
     selectedCategory: '',
@@ -196,7 +345,7 @@ const containerView = {
             @update:selected-category="selectedCategory = $event"
           ></select-category>
         </v-flex>
-        <v-flex xs6>
+        <v-flex xs7>
           <button-input
             :search="search"
             :selectedCategory="selectedCategory"
@@ -204,10 +353,17 @@ const containerView = {
             @updated:payload="payload = $event"
           ></button-input>
         </v-flex>
+        <v-flex xs2>
+          <button-clear
+            :payload="payload"
+            @updated:payload="payload = $event"
+          ></button-clear>
+        </v-flex>
       </v-layout>
-      <result-search
+      <result
         :payload="payload"
-      ></result-search>
+        :selectedCategory="selectedCategory"
+      ></result>
     </v-container>
   `,
 };
