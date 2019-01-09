@@ -1,6 +1,6 @@
 # Spotify Wrapper
 
-[![Build Status](https://travis-ci.com/GSabadini/spotify-wrapper.svg?branch=master)](https://travis-ci.com/GSabadini/spotify-wrapper) [![Coverage Status](https://coveralls.io/repos/github/GSabadini/spotify-wrapper/badge.svg?branch=master)](https://coveralls.io/github/GSabadini/spotify-wrapper?branch=master)
+[![Build Status](https://travis-ci.com/GSabadini/spotify-wrapper.svg?branch=master)](https://travis-ci.com/GSabadini/spotify-wrapper)[![Coverage Status](https://coveralls.io/repos/github/GSabadini/spotify-wrapper/badge.svg?branch=master)](https://coveralls.io/github/GSabadini/spotify-wrapper?branch=master)
 
 A wrapper to work with the [Spotify Web API](https://developer.spotify.com/web-api/).
 
@@ -16,12 +16,6 @@ This library relies on [Fetch API](https://fetch.spec.whatwg.org/). And this API
 
 This library depends on [fetch](https://fetch.spec.whatwg.org/) to make requests to the Spotify Web API. For environments that don't support fetch, you'll need to provide a [polyfill](https://github.com/github/fetch) to browser or [polyfill](https://github.com/bitinn/node-fetch) to Node.
 
-## Installation
-
-```sh
-$ npm install spotify-wrapper --save
-```
-
 ## How to use
 
 ### ES6
@@ -35,7 +29,7 @@ const spotify = new SpotifyWrapper({
 });
 
 // using  method
-spotify.search.artists('Incubus');
+spotify.search.artists('Nirvana');
 ```
 
 ### CommonJS
@@ -87,7 +81,7 @@ const albums = spotify.search.albums('Choosen Artist');
 **Example**
 
 ```js
-spotify.search.albums('Incubus')
+spotify.search.albums('Nirvana')
   .then(data => {
     // do what you want with the data
   })
@@ -107,7 +101,7 @@ spotify.search.albums('Incubus')
 **Example**
 
 ```js
-spotify.search.artists('Incubus')
+spotify.search.artists('Nirvana')
   .then(data => {
     // do what you want with the data
   })
