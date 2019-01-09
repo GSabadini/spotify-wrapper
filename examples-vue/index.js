@@ -109,8 +109,16 @@ const buttonInput = {
     },
   },
   methods: {
+    returnInstance() {
+      const spotify = new SpotifyWrapper({
+        token: 'BQD6DeDxMyHeNTD5it-1_PNz9rWswGQjFDcxeNIsNknmkR882Z7CgE0GTB6oi1nSFU5RI4ZNxYVpJuJ_vVnJWGKKDvtxVsYUPUALk_8-Aoc5gcemWMOiqCdRHkkzXXhMJ-hTHDtzhcflrKM'
+      })
+
+      return spotify
+    },
     getAlbums(query) {
-      const albums = spotifyWrapper.searchAlbums(query);
+      const spotify = this.returnInstance();
+      const albums = spotify.search.albums(query);
 
       albums
         .then((data) => {
@@ -122,11 +130,12 @@ const buttonInput = {
           }));
         })
         .catch((error) => {
-          alert('RENEW YOUR TOKEN!')
+          alert('RENEW YOUR TOKEN!');
         });
     },
     getArtists(query) {
-      const artists = spotifyWrapper.searchArtists(query);
+      const spotify = this.returnInstance();
+      const artists = spotify.search.artists(query);
 
       artists
         .then((data) => {
@@ -139,11 +148,12 @@ const buttonInput = {
           }));
         })
         .catch((error) => {
-          alert('RENEW YOUR TOKEN!')
+          alert('RENEW YOUR TOKEN!');
         });
     },
     getTracks(query) {
-      const tracks = spotifyWrapper.searchTracks(query);
+      const spotify = this.returnInstance();
+      const tracks = spotify.search.tracks(query);
 
       tracks
         .then((data) => {
@@ -157,11 +167,12 @@ const buttonInput = {
           }));
         })
         .catch((error) => {
-          alert('RENEW YOUR TOKEN!')
+          alert('RENEW YOUR TOKEN!');
         });
     },
     getPlaylists(query) {
-      const playlists = spotifyWrapper.searchPlaylists(query);
+      const spotify = this.returnInstance();
+      const playlists = spotify.search.playlists(query);
 
       playlists
         .then((data) => {
@@ -174,7 +185,7 @@ const buttonInput = {
           }));
         })
         .catch((error) => {
-          alert('RENEW YOUR TOKEN!')
+          alert('RENEW YOUR TOKEN!');
         });
     },
     getSearch(query, type) {
@@ -205,11 +216,6 @@ const buttonInput = {
       };
 
       search[type]();
-    },
-  },
-  watch: {
-    selectedCategory() {
-      this.getSearch(this.search, this.selectedCategory)
     },
   },
   template: `
@@ -311,9 +317,6 @@ const result = {
       <result-artists v-if="selectedCategory === 'artists'" :payload="payload"/>
       <result-tracks v-if="selectedCategory === 'tracks'" :payload="payload"/>
     </div>
-    <div class="notFound" v-else>
-      <not-found/>
-    </div>
   `,
 };
 
@@ -330,6 +333,11 @@ const containerView = {
     search: '',
     payload: {},
   }),
+  watch: {
+    selectedCategory() {
+      this.payload = {};
+    },
+  },
   template: `
     <v-container fluid grid-list-md>
       <v-layout row wrap align-center justify-center>
