@@ -1,4 +1,4 @@
-var searchInput = {
+const searchInput = {
   props: ['search'],
   computed: {
     searchTerm: {
@@ -20,7 +20,7 @@ var searchInput = {
   `,
 };
 
-var selectCategory = {
+const selectCategory = {
   props: ['selectedCategory'],
   computed: {
     selected: {
@@ -63,37 +63,46 @@ var selectCategory = {
   `,
 };
 
-var buttonInput = {
+const buttonInput = {
   props: [
     'search',
     'selectedCategory',
     'payload',
   ],
-  watch: {
-    payload(newValue, oldValue) {
-      console.log('watch', newValue, oldValue);
+  computed: {
+    pay: {
+      get() {
+        console.log(this.payload, 'get');
+        return this.payload;
+      },
+      set(newValue) {
+        this.$emit('updated:payload', newValue);
+      },
     },
   },
-  data: () => ({
-    pay: {},
-  }),
   methods: {
     handleSearch(query, type) {
       const search = {
         albums() {
-          const albums = spotifyWrapper.searchAlbums(query);
-
-          albums
-            .then(data => {
-
-              this.pay = data.albums.items.map(item => {
-                return {
-                  image: item.images[0].url,
-                  name: item.name,
-                }
-              })
-            })
-            return albums;
+          // const albums = spotifyWrapper.searchAlbums(query);
+          // let listItems;
+          // let promise;
+          //
+          // promise = albums.then(data => data.albums.items)
+          //
+          // console.log('promise', promise);
+          // albums
+          //   .then(data => {
+          //
+          //     listItems = data.albums.items.map(item => {
+          //       return {
+          //         image: item.images[0].url,
+          //         name: item.name,
+          //       }
+          //     })
+          //
+          //     this.payload = listItems
+          //   })
         },
         artists() {
           const artists = spotifyWrapper.searchArtists(query);
@@ -118,9 +127,14 @@ var buttonInput = {
       if (!query) {
         return
       }
-      this.pay = this.handleSearch(query, type)
 
-      this.$emit('updated:payload', this.pay);
+      if (!this.selectedCategory) {
+        alert('Selecione uma categoria');
+        return
+      }
+
+      this.pay = this.handleSearch(query, type);
+      console.log(this.pay)
     }
   },
   template: `
@@ -135,17 +149,12 @@ var buttonInput = {
   `,
 };
 
-var resultSearch = {
+const resultSearch = {
   props: ['payload'],
   computed: {
     payloadExist() {
       return !!Object.keys(this.payload).length;
     },
-  },
-  watch: {
-    payload(newValue, oldValue) {
-      console.log('watch', newValue, oldValue)
-    }
   },
   template: `
     <div class="resultSearch">
@@ -160,7 +169,7 @@ var resultSearch = {
   `,
 };
 
-var containerView = {
+const containerView = {
   components: {
     buttonInput,
     searchInput,
@@ -203,7 +212,7 @@ var containerView = {
   `,
 };
 
-var app = new Vue({
+const app = new Vue({
   el: '#app',
   components: {
     'container-view': containerView,

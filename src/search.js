@@ -6,24 +6,17 @@ import toJSON from './utils';
 export const search = (query, type) => {
   const headers = {
     headers: {
-      Authorization: `Bearer BQDItSzCx7lEq43DIGqEWNVSdakTXG7SYbucyh9BvvnRPINo6Csn3tAL83i0nnBLP-B1bjodnKyBrB2TL2fpbOMYrz76FkJzNzrsAjvdOIRhRynE6YfLDqMww8-roWJP-8CWH2H37pjfMz4`,
+      Authorization: 'Bearer BQBjidgpAorFqAVFmxf68fxdJk6151v1v_w4MYvCSejhVEvS7ve172pDcQDMeHPnBMsK8JpwvcW2TAIbN7xNJ4YTm_G4whIVAR-KH_C1Q1C40XvVvzMwVNbuKDAyKEj7D1F2vyQOB888fVg',
     },
   };
+
   return fetch(`${API_URL}/search?q=${query}&type=${type}`, headers).then(toJSON);
 };
 
-export const searchArtists = (query) => {
-  return search(query, 'artist');
-};
+export const searchArtists = query => search(query, 'artist');
 
-export const searchAlbums = (query) => {
-  return search(query, 'album');
-};
+export const searchAlbums = query => search(query, 'album');
 
-export const searchTracks = (query) => {
-  return search(query, 'track');
-};
+export const searchTracks = query => search(query, 'track');
 
-export const searchPlaylists = (query) => {
-  return search(query, 'playlist');
-};
+export const searchPlaylists = query => search(query, 'playlist');
