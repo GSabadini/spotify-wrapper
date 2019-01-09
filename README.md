@@ -1,6 +1,6 @@
 # Spotify Wrapper
 
-<!-- [![Build Status](https://travis-ci.org/willianjusten/spotify-wrapper.svg?branch=master)](https://travis-ci.org/willianjusten/spotify-wrapper) [![Coverage Status](https://coveralls.io/repos/github/willianjusten/spotify-wrapper/badge.svg?branch=master)](https://coveralls.io/github/willianjusten/spotify-wrapper?branch=master) -->
+[![Build Status](https://travis-ci.com/GSabadini/spotify-wrapper.svg?branch=master)](https://travis-ci.com/GSabadini/spotify-wrapper) [![Coverage Status](https://coveralls.io/repos/github/GSabadini/spotify-wrapper/badge.svg?branch=master)](https://coveralls.io/github/GSabadini/spotify-wrapper?branch=master)
 
 A wrapper to work with the [Spotify Web API](https://developer.spotify.com/web-api/).
 
@@ -221,7 +221,7 @@ We use [SemVer](http://semver.org/) for versioning. For the versions available, 
 
 ## Authors
 
-<!-- | ![Gabriel Facina](https://avatars2.githubusercontent.com/u/3991845?v=3&s=150)| -->
+| ![Gabriel Facina](https://user-images.githubusercontent.com/33721794/50922717-4c262780-1432-11e9-82ea-0cbb5afbcf47.jpg)|
 |:---------------------:|
 |  [Gabriel Facina](https://github.com/GSabadini/)   |
 
