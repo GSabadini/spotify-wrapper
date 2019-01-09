@@ -223,7 +223,6 @@ We use [SemVer](http://semver.org/) for versioning. For the versions available, 
 
 ## Authors
 
-| ![Gabriel Facina]
 |:---------------------:|
 |  [Gabriel Facina](https://github.com/GSabadini/)   |
 
