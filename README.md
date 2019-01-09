@@ -215,7 +215,6 @@ We use [SemVer](http://semver.org/) for versioning. For the versions available, 
 
 ## Authors
 
-| ![Gabrien Facina](https://avatars2.githubusercontent.com/u/3991845?v=3&s=150)|
 |:---------------------:|
 |  [Gabriel Facina](https://github.com/GSabadini/)   |
 
